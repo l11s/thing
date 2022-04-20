@@ -120,8 +120,6 @@
                 // 一定要取消他的默认行为
                 e.preventDefault();
                 console.log($(this).serialize());
-                // rig($(this).find('.username').val(), $(this).find('.password').val());
-                // console.log("login");
                 $.ajax({
                     method: 'POST',
                     url: 'api/login',
@@ -131,6 +129,7 @@
                         if (res.status == '0') {
                             layer.alert("登陆成功");
                             localStorage.setItem("token", res.token);
+                            location.href = "./index.html";
                         } else {
                             layer.alert("登陆失败");
                         }
@@ -153,11 +152,13 @@
                     },
                     success: function(res) {
                         console.log(res);
-
+                        if (res.status == 0) {
+                            layer.alert(res.message);
+                            $('.rigturn').click();
+                        }
                     }
                 }).then(function(res) {
-                    layer.alert(res.message);
-                    $('.rigturn').click();
+
                 });
             });
         });

@@ -1,15 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>layout 管理系统大布局 - Layui</title>
+    <link rel="stylesheet" href="./assets/lib/layui/css/layui.css">
+    <link rel="stylesheet" href="./assets/css/index.css">
+    <link rel="stylesheet" href="./assets/fonts/iconfont.css">
+    <script src="./assets/lib/jquery.js"></script>
 </head>
 
 <body>
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo layui-hide-xs layui-bg-black">
+                <img src="./assets/images/logo.png" alt="">
+            </div>
+            <!-- 头部区域（可配合layui 已有的水平导航） -->
 
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item layui-hide layui-show-md-inline-block">
+                    <a href="javascript:;" class="head">
+                        <span class="spanhead sp">A</span>
+                        <img style="width: 40px; height: 40px;" src="./assets/images/login_title.png" class="layui-nav-img"> 个人中心
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="">基本资料</a></dd>
+                        <dd><a href="">更换头像</a></dd>
+                        <dd><a href="">重置密码</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect>
+                    <a href="javascript:;" class="quit">
+                        <span class="iconfont icon-tuichu"></span>
+                        <!-- <i class="layui-icon layui-icon-logout"></i>  -->
+                        退出
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <a class="head" href="javascript:;">
+                    <span class="spanhead sp1">A</span>
+                    <img src="./assets/images/login_title.png" class="layui-nav-img" style="width: 40px; height: 40px;"> 欢迎&nbsp; <span class="usernamespan"></span>
+                </a>
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree leftui" lay-shrink="all" lay-filter="test">
+                    <!-- <li class="layui-nav-item layui-nav-itemed">
+                        <i class="layui-icon layui-icon-home"></i>
+                        <a class="" href="javascript:;">首页</a>
+                    </li> -->
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <!-- <i></i> -->
+                        <!-- <i class="layui-icon layui-icon-home home"></i> -->
+                        <a class="layui-this" href="./home/dashboard.html" target="fm">
+                            <span class="iconfont icon-home"></span> 首页
+                        </a>
+                    </li>
+                    <li class="layui-nav-item">
+
+                        <!-- <i class="layui-icon layui-icon-face-smile article"></i> -->
+                        <a href="javascript:;">
+                            <span class="iconfont icon-16"></span> 文章管理
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="javascript:;">文章类别</a></dd>
+                            <dd><a href="javascript:;">文章列表</a></dd>
+                            <dd><a href="javascript:;">发表文章</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item">
+
+                        <!-- <i class="layui-icon layui-icon-username person"></i> -->
+                        <a href="javascript:;">
+                            <span class="iconfont icon-user"></span> 个人中心
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="javascript:;">基本资料</a></dd>
+                            <dd><a href="javascript:;">更换头像</a></dd>
+                            <dd><a href="javascript:;">重置密码</a></dd>
+                        </dl>
+                    </li>
+                    <!-- <li class="layui-nav-item"><a href="">the links</a></li> -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="layui-body">
+            <iframe name="fm" src="./home/dashboard.html" frameborder="0"></iframe>
+        </div>
+
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            <!-- 底部固定区域 -->
+            www.itheima.com-黑马程序员
+        </div>
+    </div>
+    <script src="./assets/lib/layui/layui.all.js"></script>
+    <script>
+        $(function() {
+            var layer = null;
+            layui.use('layer', function() {
+                layer = layui.layer;
+                // layer.area = ['5000px', '300px'];
+                // layer.msg('hello');
+            });
+            $.ajaxPrefilter((options) => {
+                options.url = "http://www.liulongbin.top:3007" + options.url;
+                // 是否包含字符
+                if (options.url.indexOf('/my/') !== -1) {
+                    options.headers = {
+                        Authorization: localStorage.getItem("token") || ""
+                    };
+                }
+            });
+            // var loc = ;
+            $.ajax({
+                method: 'GET',
+                url: '/my/userinfo',
+                success: function(res) {
+                    if (res.status == 0) {
+                        console.log(res);
+                        // $('a.head').text(res.username);
+                        var name = res.data.nickname || res.data.username;
+                        console.log(res.username);
+                        console.log($('.usernamespan'));
+                        $('.usernamespan').html(name);
+                        if (res.user_pic == null) {
+                            // var name = res.data.username;
+                            $('.spanhead').text(name[0].toUpperCase()).show();
+                            $('.layui-nav-img').hide();
+                        } else {
+                            $('.spanhead').hide();
+                            $('.layui-nav-img').prop("src", res.user_pic).show();
+                        }
+                    } else {
+                        // layer.alert("获取用户登录信息失败");
+                        if (res.status == 1 && res.message == "身份认证失败！") {
+                            location.href = './login.html';
+                            // 防止程序员手写token
+                            localStorage.removeItem('token');
+                        }
+                    }
+                }
+            });
+        });
+
+        $('.quit').on("click", function() {
+            layer.confirm('确定退出登录?', {
+                icon: 3,
+            }, function(index) {
+                layer.close(index);
+                localStorage.removeItem('token');
+                location.href = "./login.html";
+            });
+        });
+
+        //eg1
+
+        //eg2
+        // layer.confirm('确定退出登录?', function(index) {
+        //     //do something
+
+        //     layer.close(index);
+
+        // });
+    </script>
 </body>
 
 </html>

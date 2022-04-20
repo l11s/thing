@@ -1,0 +1,90 @@
+.layui-footer {
+    text-align: center;
+    /* overflow: hidden; */
+}
+
+.leftui {
+    position: relative;
+    margin-top: 10px;
+}
+
+.leftui li {
+    position: relative;
+    padding-left: 5px;
+}
+
+.leftui li a {
+    font-size: 14px;
+}
+
+.iconfont {
+    margin-right: 5px;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.layui-body {
+    overflow: hidden;
+}
+
+.layui-side-scroll .head {
+    /* position: relative; */
+    /* overflow: hidden; */
+    display: flex;
+    margin-left: 30px;
+    margin-top: 10px;
+    font-size: 15px;
+    color: aliceblue;
+}
+
+.spanhead {
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    /* position: absolute; */
+    border-radius: 50%;
+    background-color: rgb(42, 108, 108);
+    text-align: center;
+    line-height: 40px;
+    font-size: 20px;
+}
+
+.sp {
+    position: relative;
+    left: 0;
+    top: 3px;
+}
+
+.sp1 {
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
+.usernamespan {
+    /* align-content: center; */
+    /* align-content: m; */
+    /* align-items: m; */
+    /* vertical-align: bottom; */
+    height: 40px;
+    line-height: 40px;
+    display: inline-block;
+    font-size: 16px;
+    /* line-height: 100%; */
+}
+
+.layui-side-scroll .head {
+    line-height: 40px;
+}
+
+
+/* 禁止所有动画 */
+
+
+/* 
+a {
+    transition: none !important;
+} */
