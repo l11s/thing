@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="./l"> -->
+    <link rel="stylesheet" href="./assets/lib/layui/css/layui.css">
+    <!-- <script src="./assets/lib/layui/layui.js"></script> -->
+    <link rel="stylesheet" href="./assets/lib/layui/css/login.css">
+    <!-- <link rel="stylesheet" href="./assets/lib/layui/layui.all.js"> -->
+    <script src="./assets/lib/jquery.js"></script>
+    <!-- <script src="./assets/js/login.js"></script> -->
+</head>
+
+<body>
+    <h1 class="layui-main"><img src="./assets/images/logo.png" alt=""></h1>
+
+    <div class="main">
+        <h2 class="title"></h2>
+        <form class="login layui-form">
+            <div class="layui-form-item">
+                <input type="text" name="username" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input username" title="请输入用户名">
+                <i class="layui-icon layui-icon-username"></i>
+            </div>
+            <div class="layui-form-item">
+                <i class="layui-icon layui-icon-password pass3"></i>
+                <input type="password" name="password" required lay-verify="required|password" placeholder="请输入密码" autocomplete="off" class="layui-input password" title="请输入密码">
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn layui-btn-normal loginbtn" lay-submit lay-filter="formDemo">登录</button>
+            </div>
+            <div class="layui-form-item">
+                <a href="javascript:;" class="loginturn">去注册账号</a>
+            </div>
+        </form>
+        <form class="rig layui-form">
+            <div class="layui-form-item">
+                <input type="text" name="username" required lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input username" title="请输入用户名">
+                <i class="layui-icon layui-icon-username"></i>
+            </div>
+            <div class="layui-form-item">
+                <i class="layui-icon layui-icon-password pass1"></i>
+                <input type="password" name="password" required lay-verify="required|password" placeholder="请输入密码" autocomplete="off" class="layui-input password1" title="请输入密码">
+            </div>
+            <div class="layui-form-item">
+                <i class="layui-icon layui-icon-password pass2"></i>
+                <input type="password" name="password" required lay-verify="required|password1" placeholder="再次确认密码" autocomplete="off" class="layui-input" title="再次确认密码">
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">注册</button>
+            </div>
+            <div class="layui-form-item">
+                <a href="javascript:;" class="rigturn">去登录</a>
+            </div>
+        </form>
+    </div>
+    <!-- 不能放在DOM元素前面 -->
+    <script src="./assets/lib/layui/layui.js"></script>
+    <script>
+        // layer.msg('hello');
+    </script>
+    <!-- <base href=""> -->
+    <script>
+        $(function() {
+            layui.use('form', function() {
+                var form = layui.form;
+                form.verify({
+                    password: function(value, item) {
+                        var t = /^[0-9a-zA-Z_-]{6,12}$/
+                        if (value == "") {
+                            return "不能为空"
+                        }
+                        if (t.test(value) == false) {
+                            return "密码必须大于6位小于12"
+                        }
+                    },
+                    password1: function(value, index) {
+                        if ($('.password1').val() != value) {
+                            return "两次密码不一致"
+                        }
+                    }
+                });
+            });
+            $('.loginturn').on("click", function() {
+                $(this).parent().parent().hide();
+                $('.rig').show();
+            });
+            $('.rigturn').on("click", function() {
+                // $(this).toggle();
+                $('.login').show();
+                $(this).parent().parent().hide();
+            });
+            var layer = null;
+            layui.use('layer', function() {
+                layer = layui.layer;
+                layer.area = ['5000px', '300px'];
+                // layer.msg('hello');
+            });
+
+            function login(name, pass) {
+
+            }
+
+            function rig(name, pass) {
+
+            }
+
+            $.ajaxPrefilter(function(options) {
+                // options.
+                options.url = 'http://www.liulongbin.top:3007/' + options.url;
+                console.log("options:" + options);
+                console.log("optionsurl:" + options.url);
+            });
+
+            // 登录
+            $('.login').on("submit", function(e) {
+                // 一定要取消他的默认行为
+                e.preventDefault();
+                console.log($(this).serialize());
+                // rig($(this).find('.username').val(), $(this).find('.password').val());
+                // console.log("login");
+                $.ajax({
+                    method: 'POST',
+                    url: 'api/login',
+                    data: $(this).serialize(),
+                    success: function(res) {
+                        console.log(res);
+                        if (res.status == '0') {
+                            layer.alert("登陆成功");
+                            localStorage.setItem("token", res.token);
+                        } else {
+                            layer.alert("登陆失败");
+                        }
+                    }
+                }).then(function(res) {
+                    // layer.alert(res.message);
+                });
+            });
+            // 注册
+            $('.rig').on("submit", function(e) {
+                // 一定要取消他的默认行为
+                e.preventDefault();
+                console.log($(this).serialize());
+                $.ajax({
+                    method: 'POST',
+                    url: 'api/reguser',
+                    data: {
+                        username: $(this).find('.username').val(),
+                        password: $(this).find('.password1').val()
+                    },
+                    success: function(res) {
+                        console.log(res);
+
+                    }
+                }).then(function(res) {
+                    layer.alert(res.message);
+                    $('.rigturn').click();
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
