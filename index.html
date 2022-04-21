@@ -26,9 +26,9 @@
                         <img style="width: 40px; height: 40px;" src="./assets/images/login_title.png" class="layui-nav-img"> 个人中心
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a href="">基本资料</a></dd>
-                        <dd><a href="">更换头像</a></dd>
-                        <dd><a href="">重置密码</a></dd>
+                        <dd><a href="./user/user.html" target="fm">基本资料</a></dd>
+                        <dd><a href="./Avatar.html" target="fm">更换头像</a></dd>
+                        <dd><a href="./password.html" target="fm">重置密码</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect>
@@ -79,9 +79,9 @@
                             <span class="iconfont icon-user"></span> 个人中心
                         </a>
                         <dl class="layui-nav-child">
-                            <dd><a href="javascript:;">基本资料</a></dd>
-                            <dd><a href="javascript:;">更换头像</a></dd>
-                            <dd><a href="javascript:;">重置密码</a></dd>
+                            <dd><a href="./user/user.html" target="fm">基本资料</a></dd>
+                            <dd><a href="./Avatar.html" target="fm">更换头像</a></dd>
+                            <dd><a href="./password.html" target="fm">重置密码</a></dd>
                         </dl>
                     </li>
                     <!-- <li class="layui-nav-item"><a href="">the links</a></li> -->
@@ -100,6 +100,7 @@
         </div>
     </div>
     <script src="./assets/lib/layui/layui.all.js"></script>
+    <script src="./base.js"></script>
     <script>
         $(function() {
             var layer = null;
@@ -108,15 +109,22 @@
                 // layer.area = ['5000px', '300px'];
                 // layer.msg('hello');
             });
-            $.ajaxPrefilter((options) => {
-                options.url = "http://www.liulongbin.top:3007" + options.url;
-                // 是否包含字符
-                if (options.url.indexOf('/my/') !== -1) {
-                    options.headers = {
-                        Authorization: localStorage.getItem("token") || ""
-                    };
-                }
-            });
+            // $.ajaxPrefilter((options) => {
+            //     options.url = "http://www.liulongbin.top:3007" + options.url;
+            //     // 是否包含字符
+            //     if (options.url.indexOf('/my/') !== -1) {
+            //         options.headers = {
+            //             Authorization: localStorage.getItem("token") || ""
+            //         };
+            //     }
+            // });
+            // init();
+
+
+            init();
+        });
+
+        function init() {
             // var loc = ;
             $.ajax({
                 method: 'GET',
@@ -124,18 +132,20 @@
                 success: function(res) {
                     if (res.status == 0) {
                         console.log(res);
+                        var pic = res.data.user_pic;
+                        // console.log(pic);
                         // $('a.head').text(res.username);
                         var name = res.data.nickname || res.data.username;
-                        console.log(res.username);
-                        console.log($('.usernamespan'));
                         $('.usernamespan').html(name);
-                        if (res.user_pic == null) {
-                            // var name = res.data.username;
+                        if (res.data.user_pic == null) {
                             $('.spanhead').text(name[0].toUpperCase()).show();
                             $('.layui-nav-img').hide();
                         } else {
                             $('.spanhead').hide();
-                            $('.layui-nav-img').prop("src", res.user_pic).show();
+                            console.log("dsncjaklnl");
+                            var t = "";
+                            // t.sp
+                            $('.layui-nav-img').prop("src", res.data.user_pic).show();
                         }
                     } else {
                         // layer.alert("获取用户登录信息失败");
@@ -147,8 +157,7 @@
                     }
                 }
             });
-        });
-
+        }
         $('.quit').on("click", function() {
             layer.confirm('确定退出登录?', {
                 icon: 3,
@@ -158,16 +167,6 @@
                 location.href = "./login.html";
             });
         });
-
-        //eg1
-
-        //eg2
-        // layer.confirm('确定退出登录?', function(index) {
-        //     //do something
-
-        //     layer.close(index);
-
-        // });
     </script>
 </body>
 

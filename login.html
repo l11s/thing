@@ -1,3 +1,5 @@
+<!-- ahnkjs -->
+<!-- 28780890@qq.com -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -111,21 +113,18 @@
             $.ajaxPrefilter(function(options) {
                 // options.
                 options.url = 'http://www.liulongbin.top:3007/' + options.url;
-                console.log("options:" + options);
-                console.log("optionsurl:" + options.url);
+
             });
 
             // 登录
             $('.login').on("submit", function(e) {
                 // 一定要取消他的默认行为
                 e.preventDefault();
-                console.log($(this).serialize());
                 $.ajax({
                     method: 'POST',
                     url: 'api/login',
                     data: $(this).serialize(),
                     success: function(res) {
-                        console.log(res);
                         if (res.status == '0') {
                             layer.alert("登陆成功");
                             localStorage.setItem("token", res.token);
@@ -142,7 +141,6 @@
             $('.rig').on("submit", function(e) {
                 // 一定要取消他的默认行为
                 e.preventDefault();
-                console.log($(this).serialize());
                 $.ajax({
                     method: 'POST',
                     url: 'api/reguser',
@@ -151,7 +149,6 @@
                         password: $(this).find('.password1').val()
                     },
                     success: function(res) {
-                        console.log(res);
                         if (res.status == 0) {
                             layer.alert(res.message);
                             $('.rigturn').click();
